@@ -4,7 +4,7 @@ import { PageLayout } from "./compontents/Layout/Layout";
 import { useEffect, useState } from "react";
 import { Routes, Route, useParams, useLocation, Link } from "react-router-dom";
 import AddNewPost from "./compontents/AddNewPost";
-import styles from "./scss/styles.module.css";
+import styles from "./css/styles.module.css";
 // import { style } from "./scss/styles.css";
 
 // import { useSelector } from 'react-redux'
@@ -105,11 +105,14 @@ const PostComponent = ({ postData, users }) => {
 
   return (
     <div className={styles.post}>
-      <div className={styles.post_author}>
-        {author ? author.name : "Бердашев Никита Алексеевич"}
+      <div className={styles.header}>
+        <div className={styles.post_author}>
+          {author ? author.name : "Бердашев Никита Алексеевич"}
+        </div>
+        <div className={styles.post_title}> {postData.title}</div>
       </div>
-      <div className={styles.post_title}> {postData.title}</div>
-      <div> {postData.body}</div>
+
+      <div>Body: {postData.body}</div>
     </div>
   );
 };

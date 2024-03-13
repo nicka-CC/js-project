@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "../scss/styles.module.css";
+import styles from "./../css/styles.module.css";
 
 export default function AddNewPost({ onAddPost }) {
   const [newPostText, setNewPostText] = useState("");
