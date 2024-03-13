@@ -1,0 +1,73 @@
+.black {
+  margin: 20px;
+}
+.post {
+  border: 1px solid rgba(00, 00, 00, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  color: black;
+  background: #56bfa339;
+  font-size: 16px;
+}
+.post2 {
+  border: 1px solid rgba(00, 00, 00, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+  margin: 15px;
+  color: black;
+  background: #56bfa339;
+  font-size: 16px;
+}
+.post_author {
+  font-size: 25px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+.post_title {
+  text-align: center;
+  font-size: 19px;
+}
+.comments {
+  border: 1px solid rgba(00, 00, 00, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  color: black;
+  background: #d584d44b;
+  font-size: 16px;
+}
+.comment_title {
+  text-align: left;
+  font-size: 19px;
+}
+.comment_email {
+  text-align: left;
+  font-size: 16px;
+}
+.add {
+  border: 1px solid rgba(00, 00, 00, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+  margin: 15px;
+  color: black;
+  background: #56bfa339;
+  font-size: 16px;
+  display: flex;
+}
+.add_input {
+  width: 100%;
+  border: none;
+  background: #56bfa339;
+  border-radius: 9px;
+  padding: 5px;
+}
+.add_button {
+  background: #44c4a250;
+  border: 1px solid rgba(00, 00, 00, 0.1);
+  padding: 5px;
+  border-radius: 9px;
+}
+.add_button:hover {
+  background: #1e544550;
+}
