@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Flex, Button, Typography } from "antd";
 import { Link } from "react-router-dom";
 import { FaChevronRight } from "react-icons/fa6";
-import ui from "../../";
+import ui from "../../assets/images//card_imagees/ui.jpg";
 
 const { Title, Text } = Typography;
 
@@ -42,7 +42,8 @@ export const PostCard = ({ postData }) => {
         <Flex align="end" style={{ padding: "20px" }}>
           <div
             style={{
-              border: "1px solid #333",
+              background: "var(--primary-color)",
+              // border: "1px solid #333",
               borderRadius: "50%",
               width: "50px",
               height: "50px",
@@ -51,7 +52,7 @@ export const PostCard = ({ postData }) => {
               justifyContent: "center",
             }}
           >
-            <Link>
+            <Link style={{ color: "white" }}>
               <FaChevronRight size={30} />
             </Link>
           </div>
