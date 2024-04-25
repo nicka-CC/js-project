@@ -2,9 +2,8 @@ import React, { useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { PostCard } from "../PostCard/PostCard";
 import { useLazyGetAllPostsQuery } from "../../services/postService/postService";
-import { Typography, Result } from "antd";
-import { FaRegFaceSmileWink } from "react-icons/fa6";
 import Title from "antd/es/typography/Title";
+import { Select } from "antd";
 
 export const Home = () => {
   const params = useParams();
@@ -18,9 +17,11 @@ export const Home = () => {
     getPosts();
   }, [getPosts]);
 
-  console.log("🚀 ~ HomeCompnonent ~ location:", location);
-
-  console.log("🚀 ~ HomeCompnonent ~ params:", params);
+  const filters = [
+    { label: "Номер недели", data: [] },
+    { label: "Время пары", data: [] },
+    { label: "Преподаватель", data: [] },
+  ];
   return (
     <div
       style={{
@@ -44,6 +45,20 @@ export const Home = () => {
         }}
       >
         <Title level={1}>Расписание занятий</Title>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Title level={5}>Filters</Title>
+          <div style={{ display: "flex", flexDirection: "row", gap: "5px" }}>
+            {filters.map((filter) => (
+              <Select placeholder={filter.label} options={filter.data} />
+            ))}
+          </div>
+        </div>
       </div>
       {isSuccess &&
         posts?.ok &&
@@ -57,11 +72,19 @@ export const Home = () => {
                   {Object.keys(post[weekNumber]).map((day) => {
                     let currentWeekData = post[weekNumber];
 
+                    if (currentWeekData[day].length === 0) return;
                     return (
                       <>
                         <Title level={5}>{day}</Title>
 
-                        {currentWeekData[day].length > 0 ? (
+                        {currentWeekData[day].length > 0 &&
+                          currentWeekData[day].map((currentDayPost) => (
+                            <PostCard postData={currentDayPost} />
+                          ))}
+                      </>
+                    );
+                  })}
+                  {/* {currentWeekData[day].length > 0 ? (
                           currentWeekData[day].map((currentDayPost) => (
                             <PostCard postData={currentDayPost} />
                           ))
@@ -73,7 +96,7 @@ export const Home = () => {
                         )}
                       </>
                     );
-                  })}
+                  })} */}
                 </>
               );
             })}
