@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { PostCard } from "../PostCard/PostCard";
 import { useLazyGetAllPostsQuery } from "../../services/postService/postService";
 import Title from "antd/es/typography/Title";
 import { Select } from "antd";
+import { getFilteredStructure } from "../../services/service";
 
 export const Home = () => {
   const params = useParams();
@@ -11,17 +12,64 @@ export const Home = () => {
 
   const [getPosts, { data: posts, isError, isSuccess, isLoading, error }] =
     useLazyGetAllPostsQuery();
-  // console.log("🚀 ~ Home ~ posts:", posts.result)
 
   useEffect(() => {
     getPosts();
   }, [getPosts]);
+  // console.log("🚀 ~ Home ~ posts:", posts.result)
+
+  const filterData = useMemo(() => {
+    let filterStructure = getFilteredStructure(posts?.result || []);
+    return filterStructure;
+  }, [posts]);
+
+  const [weekFilter, setWeekFilter] = useState(null);
+  console.log("🚀 ~ Home ~ weekFilter:", weekFilter);
+  const [timeFilter, setTimeFilter] = useState(null);
+  const [teacherFilter, setTeacherFilter] = useState(null);
+
+  const filterSelectWeekNumber = (value) => setWeekFilter(value);
+  const filterSelectTime = (value) => setTimeFilter(value);
+  const filterSelectTeacher = (value) => setTeacherFilter(value);
 
   const filters = [
-    { label: "Номер недели", data: [] },
-    { label: "Время пары", data: [] },
-    { label: "Преподаватель", data: [] },
+    {
+      label: "Номер недели",
+      data: filterData.weekNumbers,
+      onChange: filterSelectWeekNumber,
+    },
+    {
+      label: "Время занятий",
+      data: filterData.time,
+      onChange: filterSelectTime,
+    },
+    {
+      label: "Преподаватель",
+      data: filterData.teachers,
+      onChange: filterSelectTeacher,
+    },
   ];
+
+  const getFilteredData = (posts) => {
+    let _filteredData = posts || [];
+
+    _filteredData = _filteredData.filter((data) => {
+      let _data = data;
+      let _dataKeys = Object.keys(_data).map((k) => k.replaceAll(" ", ""));
+
+      if (weekFilter && _dataKeys.length > 0) {
+        if (_dataKeys.includes(weekFilter)) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      return true;
+    });
+
+    return _filteredData;
+  };
   return (
     <div
       style={{
@@ -55,14 +103,18 @@ export const Home = () => {
           <Title level={5}>Filters</Title>
           <div style={{ display: "flex", flexDirection: "row", gap: "5px" }}>
             {filters.map((filter) => (
-              <Select placeholder={filter.label} options={filter.data} />
+              <Select
+                placeholder={filter.label}
+                options={filter.data}
+                onChange={filter.onChange}
+              />
             ))}
           </div>
         </div>
       </div>
       {isSuccess &&
         posts?.ok &&
-        posts.result.map((post, index) => (
+        getFilteredData(posts?.result || []).map((post, index) => (
           <>
             {Object.keys(post).map((weekNumber) => {
               return (
@@ -73,12 +125,36 @@ export const Home = () => {
                     let currentWeekData = post[weekNumber];
 
                     if (currentWeekData[day].length === 0) return;
+                    let currentWeekDataByDay = currentWeekData[day];
+
+                    if (timeFilter) {
+                      currentWeekDataByDay = currentWeekDataByDay.filter(
+                        (j) => j.time == timeFilter
+                      );
+                    }
+
+                    if (
+                      currentWeekDataByDay.every(
+                        (dt) =>
+                          !dt.lecture.name ||
+                          !dt.lecture?.classroom ||
+                          !dt?.lecture?.teacher
+                      )
+                    )
+                      return;
+
+                    console.log(
+                      "🚀 ~ {Object.keys ~ currentWeekDataByDay:",
+                      currentWeekDataByDay,
+                      currentWeekDataByDay.length
+                    );
+                    if (currentWeekDataByDay.length === 0) return;
                     return (
                       <>
                         <Title level={5}>{day}</Title>
 
-                        {currentWeekData[day].length > 0 &&
-                          currentWeekData[day].map((currentDayPost) => (
+                        {currentWeekDataByDay.length > 0 &&
+                          currentWeekDataByDay.map((currentDayPost) => (
                             <PostCard postData={currentDayPost} />
                           ))}
                       </>
