@@ -1,8 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 
 import { Outlet, useNavigate } from "react-router-dom";
 
-import { Layout, Menu, Button, Calendar, Space, Avatar } from "antd";
+import {
+  Layout,
+  Menu,
+  Button,
+  Calendar,
+  Avatar,
+  Badge,
+  Select,
+  Row,
+  Col,
+} from "antd";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 import classes from "./Layout.module.css";
@@ -15,18 +25,13 @@ import {
   IoSettings,
 } from "react-icons/io5"; // Или другой подходящий подкаталог, в зависимости от иконки
 
-import { useDispatch, useSelector } from "react-redux";
-import {
-  resetCouter,
-  setCouter,
-} from "../../store/reducer/CounterSlice/counterSlice";
 import Title from "antd/es/typography/Title";
 import Text from "antd/es/typography/Text";
 
 export const PageLayout = ({ children }) => {
   const navigate = useNavigate();
-  const [number, setNumber] = useState(0);
-  const { Header, Content, Footer, Sider } = Layout;
+  // const [number, setNumber] = useState(0);
+  const { Content } = Layout;
   const [collapseMenu, setCollapsMenu] = useState(false);
 
   const menuItems = [
@@ -91,7 +96,8 @@ export const PageLayout = ({ children }) => {
         <div
           className={classes.sidebar}
           style={{
-            width: `${collapseMenu ? "80px" : "250px"}`,
+            minWidth: `${collapseMenu ? "80px" : "250px"}`,
+            maxWidth: `${collapseMenu ? "80px" : "250px"}`,
           }}
         >
           <div style={{ marginLeft: "25px" }}>
@@ -126,18 +132,70 @@ export const PageLayout = ({ children }) => {
         </Content>
         <div
           style={{
-            width: "430px",
+            width: "460px",
             padding: "40px",
             background: "var(--rightslide-background-color)",
             margin: "5px 5px 5px 0px",
             borderRadius: "0px 20px 20px 0px",
+            overflowY: "auto",
           }}
         >
           <Title
             style={{ color: "var(--primary-color)", fontWeight: "600" }}
           >{`${new Date().getUTCDate()}, ${new Date().getUTCFullYear()}`}</Title>
 
-          <Calendar fullscreen={false} />
+          <Calendar
+            fullscreen={false}
+            mode="month"
+            cellRender={(value) => {
+              if ([10, 25, 1, 28, 29].includes(value.date())) {
+                return <Badge status={"success"} text={""}></Badge>;
+              }
+            }}
+            headerRender={({ value, type, onChange, onTypeChange }) => {
+              const start = 0;
+              const end = 12;
+              const monthOptions = [];
+
+              let current = value.clone();
+              const localeData = value.localeData();
+              const months = [];
+              for (let i = 0; i < 12; i++) {
+                current = current.month(i);
+                months.push(localeData.monthsShort(current));
+              }
+              const month = value.month();
+
+              for (let i = start; i < end; i++) {
+                monthOptions.push(
+                  <Select.Option key={i} value={i} className="month-item">
+                    {months[i]}
+                  </Select.Option>
+                );
+              }
+
+              return (
+                <div style={{ padding: 8 }}>
+                  <Row gutter={8}>
+                    <Col>
+                      <Select
+                        size="small"
+                        dropdownMatchSelectWidth={false}
+                        value={month}
+                        onChange={(newMonth) => {
+                          const now = value.clone().month(newMonth);
+                          onChange(now);
+                        }}
+                      >
+                        {monthOptions}
+                      </Select>
+                    </Col>
+                  </Row>
+                </div>
+              );
+            }}
+          ></Calendar>
+
           <div>
             <div
               style={{
