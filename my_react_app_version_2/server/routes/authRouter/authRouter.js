@@ -10,7 +10,7 @@ router.post("/reg", async (req, res) => {
   const { email, name, password } = req.body;
 
   try {
-    prisma.$disconnect();
+    prisma.$connect();
     let alreadyCreatedUser = await prisma.user.findUnique({
       where: {
         email: email,
@@ -34,6 +34,8 @@ router.post("/reg", async (req, res) => {
         password: hashed_pwd,
       },
     });
+
+    prisma.$disconnect();
 
     res.json({ ok: true, result: user });
   } catch (error) {
@@ -69,7 +71,6 @@ router.post("/login", async (req, res) => {
     delete _user.password;
 
     let token = jwt.sign(_user, "MY_SECRET_KEY", { expiresIn: "1d" });
-
     prisma.$disconnect();
     return res.json({ ok: true, user: _user, token });
   } catch (error) {

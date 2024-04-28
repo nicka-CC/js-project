@@ -5,10 +5,10 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage/RegisterPage";
 import { Home } from "./compontents/Home/Home";
-import { Button, Result } from "antd";
-import useSelection from "antd/es/table/hooks/useSelection";
+import { Result, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { setToken, setUser } from "./store/reducer/userSlice/userSlice";
+import { AccountPage } from "./pages/AccountPage/AccountPage";
 
 // import { useSelector } from 'react-redux'
 
@@ -20,13 +20,14 @@ function App() {
   const getLocalStorageItems = (key) => {
     return localStorage.getItem(key);
   };
-  // const { user, token } = useSelector((state) => state.userReducer);
+  // const { user, token } = useSelector((state) => state.userReducer)
 
-  // if (Object.keys(user).length === 0 && !token) {
-  //   dispatch(setUser({ user: JSON.parse(getLocalStorageItems("user")) }));
-  //   dispatch(setToken({ token: getLocalStorageItems("token") }));
+  // if (Object.keys(user).length !== 0 && token) {
+  //   dispatch(setUser({ user: JSON.parse(getLocalStorageItems('user')) }))
+  //   dispatch(setToken({ token: getLocalStorageItems('token') }))
   // }
-  let user = JSON.parse(getLocalStorageItems("user"));
+
+  let user = JSON.parse(getLocalStorageItems("user") || "{}");
   console.log("🚀 ~ App ~ user:", user);
   let token = getLocalStorageItems("token");
   console.log("🚀 ~ App ~ token:", token);
@@ -62,6 +63,7 @@ function App() {
       <Route path="/dashboard/*" element={isAuth(<PageLayout />)}>
         <Route index element={<Home />} />
         <Route path="user" element={<>user</>} />
+        <Route path="account/" element={<AccountPage />}></Route>
       </Route>
 
       <Route path="/auth/">
@@ -70,6 +72,7 @@ function App() {
         <Route path="reg" element={<RegisterPage />} />
         {/* <Route path='resetpassword' element={<>user</>} /> */}
       </Route>
+      <Route path="/account/" element={isAuth(<AccountPage />)}></Route>
 
       <Route path="/error/" element={<PageLayout />}>
         <Route index element={<>У вас нет роли администратора</>} />
