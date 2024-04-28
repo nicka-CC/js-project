@@ -20,12 +20,16 @@ function App() {
   const getLocalStorageItems = (key) => {
     return localStorage.getItem(key);
   };
-  const { user, token } = useSelector((state) => state.userReducer);
+  // const { user, token } = useSelector((state) => state.userReducer);
 
-  if (Object.keys(user).length === 0 && !token) {
-    dispatch(setUser({ user: JSON.parse(getLocalStorageItems("user")) }));
-    dispatch(setToken({ token: getLocalStorageItems("token") }));
-  }
+  // if (Object.keys(user).length === 0 && !token) {
+  //   dispatch(setUser({ user: JSON.parse(getLocalStorageItems("user")) }));
+  //   dispatch(setToken({ token: getLocalStorageItems("token") }));
+  // }
+  let user = JSON.parse(getLocalStorageItems("user"));
+  console.log("🚀 ~ App ~ user:", user);
+  let token = getLocalStorageItems("token");
+  console.log("🚀 ~ App ~ token:", token);
 
   const isAuth = (element) =>
     user.id && token ? (

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Card, Flex, Button, Typography } from "antd";
+import { Card, Flex, Button, Typography, Avatar } from "antd";
 import { Link } from "react-router-dom";
 import { FaChevronRight } from "react-icons/fa6";
 import card_img from "../../assets/images//card_imagees/ui.jpg";
 import { FaClock } from "react-icons/fa";
+import { IoPerson } from "react-icons/io5";
 const { Title, Text, Paragraph } = Typography;
 
 export const PostCard = ({ postData }) => {
@@ -26,7 +27,7 @@ export const PostCard = ({ postData }) => {
             style={{ padding: "0px 20px" }}
             gap={"25px"}
           >
-            <div>
+            <div style={{ display: "flex", alignItems: "center" }}>
               <img
                 alt="avatar"
                 src={card_img}

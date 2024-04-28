@@ -19,6 +19,14 @@ export const userService = createApi({
         body: body,
       }),
     }),
+
+    uploadAvatar: builder.query({
+      query: (body) => ({
+        url: `/user/upload-avatar`,
+        method: "POST",
+        body: body,
+      }),
+    }),
   }),
 });
 
@@ -26,4 +34,5 @@ export const {
   // useRegisterUserMutation,
   useLazyRegisterUserQuery,
   useLazyLoginUserQuery,
+  useLazyUploadAvatarQuery,
 } = userService;

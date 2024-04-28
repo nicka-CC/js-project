@@ -1,8 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { getBaseQuery } from "../getBaseQuery";
 
 export const postService = createApi({
   reducerPath: "postService",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3555" }),
+  baseQuery: getBaseQuery(),
   endpoints: (builder) => ({
     getAllPosts: builder.query({
       query: (body) => ({

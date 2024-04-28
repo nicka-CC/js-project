@@ -7,8 +7,9 @@ import cors from "cors";
 const app = express();
 
 const PORT = 3555;
-
+app.use("/uploads", express.static("uploads"));
 //нужно использовать до остальных роутов
+
 app.use(cors());
 app.use(express.json());
 

@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 
 import { Outlet, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Typography } from "antd";
+import { faker } from "@faker-js/faker";
+import { useLazyUploadAvatarQuery } from "../../services/userService/userService";
 
 import {
   Layout,
@@ -72,12 +76,35 @@ export const PageLayout = ({ children }) => {
     },
   ];
 
-  const useronline = [
-    { id: Math.ceil(Math.random() * 10), name: "Test user 1", avatar: "" },
-    { id: Math.ceil(Math.random() * 10), name: "Test user 2", avatar: "" },
-    { id: Math.ceil(Math.random() * 10), name: "Test user 3", avatar: "" },
-    { id: Math.ceil(Math.random() * 10), name: "Test user 4", avatar: "" },
-  ];
+  const { posts } = useSelector((state) => state.postReducer);
+
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const createRandomUser = () => {
+    return {
+      id: faker.string.uuid(),
+      name: faker.internet.userName(),
+      email: faker.internet.email(),
+      avatar: faker.image.avatar(),
+      number: faker.number.int(),
+    };
+  };
+
+  const [avatar, setAvatarFile] = useState();
+
+  const [uploadAvatar] = useLazyUploadAvatarQuery();
+
+  const sendUploadAvatar = () => {
+    let formData = new FormData();
+
+    formData.append("file", avatar[0]);
+    formData.append("user", JSON.stringify(user));
+    uploadAvatar(formData);
+  };
+
+  const mock_users = faker.helpers.multiple(createRandomUser, {
+    count: 5,
+  });
 
   const footerMenuItems = [
     {
@@ -140,6 +167,48 @@ export const PageLayout = ({ children }) => {
             overflowY: "auto",
           }}
         >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              gap: "24px",
+              justifyContent: "end",
+            }}
+          >
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <Typography.Text
+                level={4}
+                style={{
+                  marginBottom: 0,
+                  lineHeight: 1,
+                  fontWeight: 600,
+                  fontSize: 18,
+                }}
+              >
+                {user.name}
+              </Typography.Text>
+              <Typography.Text>{user.email}</Typography.Text>
+            </div>
+            <div>
+              <label htmlFor="upload_avatar">
+                <Avatar
+                  size={42}
+                  src={`http://localhost:3555/uploads/${user.avatar}`}
+                ></Avatar>
+                <input
+                  name="upload_avatar"
+                  id="upload_avatar"
+                  hidden
+                  type="file"
+                  onChange={(el) => setAvatarFile(el.target.files)}
+                  placeholder={"Upload"}
+                />
+              </label>
+              {avatar && avatar.length > 0 && (
+                <Button onClick={() => sendUploadAvatar()}>Upload</Button>
+              )}
+            </div>
+          </div>
           <Title
             style={{ color: "var(--primary-color)", fontWeight: "600" }}
           >{`${new Date().getUTCDate()}, ${new Date().getUTCFullYear()}`}</Title>
@@ -148,8 +217,21 @@ export const PageLayout = ({ children }) => {
             fullscreen={false}
             mode="month"
             cellRender={(value) => {
-              if ([10, 25, 1, 28, 29].includes(value.date())) {
+              let dates = [];
+              for (let obj of posts) {
+                for (let key in obj) {
+                  for (let day in obj[key]) {
+                    if (obj[key][day].length > 0) {
+                      dates.push(day.split(",")[1]);
+                    }
+                  }
+                }
+              }
+
+              if (dates.includes(value.format("DD.MM.YYYY"))) {
                 return <Badge status={"success"} text={""}></Badge>;
+              } else {
+                return <Badge />;
               }
             }}
             headerRender={({ value, type, onChange, onTypeChange }) => {
@@ -226,13 +308,13 @@ export const PageLayout = ({ children }) => {
             <div
               style={{ display: "flex", flexDirection: "column", gap: "16px" }}
             >
-              {useronline.map((user, index) => {
+              {mock_users.map((user, index) => {
                 return (
                   <div style={{ display: "flex", gap: "6px" }}>
-                    <Avatar size={50} icon={<IoPerson />} />
+                    <Avatar size={50} icon={<IoPerson />} src={user.avatar} />
                     <div style={{ display: "flex", flexDirection: "column" }}>
                       <Text>{user.name}</Text>
-                      <Text>{user.id}</Text>
+                      <Text>{user.number}</Text>
                     </div>
                   </div>
                 );

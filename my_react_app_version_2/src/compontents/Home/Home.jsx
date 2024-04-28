@@ -5,16 +5,23 @@ import { useLazyGetAllPostsQuery } from "../../services/postService/postService"
 import Title from "antd/es/typography/Title";
 import { Select } from "antd";
 import { getFilteredStructure } from "../../services/service";
+import { useDispatch } from "react-redux";
+import { setPosts } from "../../store/reducer/postSlice/postSlice";
 
 export const Home = () => {
-  const params = useParams();
-  const location = useLocation();
+  const dispatch = useDispatch();
 
   const [getPosts, { data: posts, isError, isSuccess, isLoading, error }] =
     useLazyGetAllPostsQuery();
 
   useEffect(() => {
-    getPosts();
+    getPosts()
+      .unwrap()
+      .then((res) => {
+        if (res.ok) {
+          dispatch(setPosts({ posts: res.result }));
+        }
+      });
   }, [getPosts]);
   // console.log("🚀 ~ Home ~ posts:", posts.result)
 

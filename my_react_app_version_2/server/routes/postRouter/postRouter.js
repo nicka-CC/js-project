@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import * as cheerio from "cheerio";
 import axios from "axios";
 import { parseLecture } from "../../services/postParseUtils.js";
+import { authCheckMiddleware } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -29,7 +30,7 @@ router.get("/", async (req, res) => {
   res.json({ ok: true, result: posts });
 });
 
-router.post("/parse", async (req, res) => {
+router.post("/parse", authCheckMiddleware, async (req, res) => {
   const { url } = req.body;
 
   let lectures = await parseLecture(url);
