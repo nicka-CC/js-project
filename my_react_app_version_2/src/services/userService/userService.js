@@ -27,13 +27,6 @@ export const userService = createApi({
         body: body,
       }),
     }),
-    // pathName: builder.query({
-    //   query: (body) => ({
-    //     url: `/user/path-name`,
-    //     method: "PATH",
-    //     body: body,
-    //   }),
-    // }),
   }),
 });
 
