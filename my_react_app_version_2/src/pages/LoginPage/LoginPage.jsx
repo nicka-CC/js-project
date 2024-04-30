@@ -27,7 +27,7 @@ export const LoginPage = () => {
             localStorage.setItem("user", JSON.stringify(res.user));
             dispath(setUser({ user: res.user }));
             dispath(setToken({ user: res.token }));
-            navigate("/dashboard/");
+            navigate("/dashboard");
           }
         });
     }

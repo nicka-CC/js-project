@@ -63,7 +63,7 @@ function App() {
       <Route path="/dashboard/*" element={isAuth(<PageLayout />)}>
         <Route index element={<Home />} />
         <Route path="user" element={<>user</>} />
-        <Route path="account/" element={<AccountPage />}></Route>
+        <Route path="account/" element={<AccountPage user={user} />}></Route>
       </Route>
 
       <Route path="/auth/">

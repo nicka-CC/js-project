@@ -32,10 +32,12 @@ router.post("/upload-avatar", uploadFiles.single("file"), async (req, res) => {
   res.json({ ok: true }).send();
 });
 router.post("/update-username", async (req, res) => {
-  const { email, newNumber } = req.body;
+  const { email, newName } = req.body;
 
-  if (!email || !newNumber) {
-    return res.status(400).json({ error: "Email and newNumber are required." });
+  if (!email || !newName) {
+    return res
+      .status(400)
+      .json({ error: "Email and newUsername are required." });
   }
 
   try {
@@ -49,7 +51,7 @@ router.post("/update-username", async (req, res) => {
 
     const updatedUser = await prisma.user.update({
       where: { email: email },
-      data: { name: newNumber },
+      data: { name: newName },
     });
 
     console.log("Updated user:", updatedUser);

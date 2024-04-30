@@ -17,14 +17,14 @@ import { useSelector } from "react-redux";
 
 import { faker } from "@faker-js/faker";
 import { useLazyUploadAvatarQuery } from "../../services/userService/userService";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
 const RightSidebar = () => {
   const { posts } = useSelector((state) => state.postReducer);
   console.log(posts);
-
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
   console.log(user);
 
@@ -65,6 +65,7 @@ const RightSidebar = () => {
       }}
     >
       <div
+        onClick={() => navigate("/dashboard/account")}
         style={{
           display: "flex",
           flexDirection: "row",
@@ -92,18 +93,18 @@ const RightSidebar = () => {
               size={42}
               src={`http://localhost:3555/uploads/${user.avatar}`}
             ></Avatar>
-            <input
+            {/* <input
               name="upload_avatar"
               id="upload_avatar"
               hidden
               type="file"
               onChange={(el) => setAvatarFile(el.target.files)}
               placeholder={"Upload"}
-            />
+            /> */}
           </label>
-          {avatar && avatar.length > 0 && (
+          {/* {avatar && avatar.length > 0 && (
             <Button onClick={() => sendUploadAvatar()}>Upload</Button>
-          )}
+          )} */}
         </div>
       </div>
       <div>

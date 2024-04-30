@@ -27,18 +27,35 @@ export const userService = createApi({
         body: body,
       }),
     }),
-    // pathName: builder.query({
-    //   query: (body) => ({
-    //     url: `/user/path-name`,
-    //     method: "PATH",
-    //     body: body,
-    //   }),
-    // }),
+    updateUsername: builder.query({
+      query: (body) => ({
+        url: `/user/update-username`,
+        method: "POST",
+        body: body,
+      }),
+    }),
+    updateNumber: builder.query({
+      query: (body) => ({
+        url: `/user/update-number`,
+        method: "POST",
+        body: body,
+      }),
+    }),
+    updateLogin: builder.query({
+      query: (body) => ({
+        url: `/user/update-login`,
+        method: "POST",
+        body: body,
+      }),
+    }),
   }),
 });
 
 export const {
   // useRegisterUserMutation,
+  useLazyUpdateLoginQuery,
+  useLazyUpdateNumberQuery,
+  useLazyUpdateUsernameQuery,
   useLazyRegisterUserQuery,
   useLazyLoginUserQuery,
   useLazyUploadAvatarQuery,
